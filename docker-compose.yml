@@ -1,0 +1,22 @@
+services:
+  pyrotel:
+    depends_on:
+      - "pyroscope"
+    environment:
+      OTEL_TRACES_EXPORTER: "otlp"
+      OTEL_METRICS_EXPORTER: "none"
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: "https://api.honeycomb.io/"
+      OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=YOUR_HONEYCOMB_API_TOKEN,x-honeycomb-dataset=YOUR_HONEYCOMB_DATASET"
+      OTEL_SERVICE_NAME: "mode.pyrotel"
+    image: pyrotel
+    build: .
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+
+  pyroscope:
+    image: "pyroscope/pyroscope:latest"
+    ports:
+      - "4040:4040"
+    command:
+      - "server"
